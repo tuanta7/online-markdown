@@ -1,11 +1,11 @@
-import { LayoutProps } from "../common/types";
+import { PropsWithChildren } from 'react';
 
-function PublicLayout({ children }: LayoutProps) {
-  return (
-    <div>
-      <main>{children}</main>
-    </div>
-  );
+function PublicLayout({ children }: PropsWithChildren) {
+    return (
+        <div className="w-full">
+            <main>{children}</main>
+        </div>
+    );
 }
 
 export default PublicLayout;

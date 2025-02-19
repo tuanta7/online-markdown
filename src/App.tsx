@@ -1,15 +1,17 @@
-import ThemeController from "./components/ThemeController.tsx";
-import LoginButton from "./features/auth/LoginButton.tsx";
+import MainLayout from './layouts/MainLayout.tsx';
+import PublicLayout from './layouts/PublicLayout.tsx';
+import HomePage from './pages/HomePage.tsx';
+import ProtectedLayout from './layouts/ProtectedLayout.tsx';
+import FocusPage from './pages/FocusPage.tsx';
 
 export default function App() {
     return (
-        <div>
-            <h1 className="text-3xl font-bold underline">
-                Hello world!
-            </h1>
-            <ThemeController />
-            <LoginButton />
-        </div>
-
-    )
+        <MainLayout>
+            <PublicLayout>
+                <HomePage />
+                <FocusPage />
+            </PublicLayout>
+            <ProtectedLayout></ProtectedLayout>
+        </MainLayout>
+    );
 }
