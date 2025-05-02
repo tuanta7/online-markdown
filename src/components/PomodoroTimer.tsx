@@ -1,8 +1,26 @@
-import Button from '../../components/Button.tsx';
+import Button from './Button.tsx';
 import { ClockIcon, PauseCircleIcon, PlayIcon } from '@heroicons/react/24/outline';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import MinutesSelector from './MinutesSelector.tsx';
+
+type TimeSelectorProps = {
+    setSelected: (selector: number) => void;
+    minutes: number[];
+    disabled: boolean;
+};
+
+function MinutesSelector({ setSelected, minutes, disabled }: TimeSelectorProps) {
+    return minutes.map((m) => (
+        <Button
+            key={m}
+            className="btn btn-sm border border-secondary w-16"
+            onClick={() => setSelected(m)}
+            disabled={disabled}
+        >
+            {m + ':00'}
+        </Button>
+    ));
+}
 
 function PomodoroTimer() {
     const [running, setRunning] = useState<boolean>(false);
@@ -10,7 +28,7 @@ function PomodoroTimer() {
     const [remainingSeconds, setRemainingSeconds] = useState<number>(25 * 60);
     const intervalID = useRef<ReturnType<typeof setInterval>>();
 
-    const { watch, setValue, getValues } = useForm({
+    const { setValue } = useForm({
         defaultValues: {
             pomodoro: 25,
             shortBreak: 5,
@@ -22,12 +40,7 @@ function PomodoroTimer() {
     const renderClock = () => {
         const seconds = remainingSeconds % 60;
         const minutes = (remainingSeconds - seconds) / 60;
-
-        return (
-            <div>
-                {minutes}:{seconds < 10 ? '0' + seconds : seconds}
-            </div>
-        );
+        return `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
     };
 
     const clearTimer = useCallback(() => {
@@ -49,7 +62,7 @@ function PomodoroTimer() {
             }
             setRemainingSeconds((p) => p - 1);
         }, 1000);
-    }, []);
+    }, [isBreaking, remainingSeconds]);
 
     const handleCountdown = useCallback(
         (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -60,7 +73,7 @@ function PomodoroTimer() {
                 startTimer();
             }
         },
-        [running, startTimer, clearTimer],
+        [running, startTimer, clearTimer]
     );
 
     useEffect(() => {
@@ -68,7 +81,7 @@ function PomodoroTimer() {
     }, [clearTimer]);
 
     return (
-        <div className="flex flex-col border rounded-xl p-4 gap-6">
+        <div className="flex flex-col border rounded-xl p-4 gap-6 w-80">
             <progress className="progress" value={remainingSeconds} max={100}></progress>
             <div className="flex items-center justify-between gap-3">
                 <div className="text-7xl font-semibold">{renderClock()}</div>

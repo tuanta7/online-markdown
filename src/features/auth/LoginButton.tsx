@@ -3,9 +3,10 @@ import React from 'react';
 import Button from '../../components/Button.tsx';
 
 import { OAUTH } from '../../common/constants.ts';
-import { httpClient, oauth } from '../../common/utils.ts';
+import { client } from '../../common/request.ts';
 import GoogleIcon from '../../components/GoogleIcon.tsx';
-import { generateRandomString } from '../../common/random.ts';
+import { randomString } from '../../common/random.ts';
+import { generateCodeVerifier, generateS256CodeChallenge } from '../../common/oauth.ts';
 
 function LoginButton() {
     const mutation = {
@@ -14,12 +15,9 @@ function LoginButton() {
 
     const handleRedirect = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
-        const state = generateRandomString(OAUTH.STATE_DEFAULT_LENGTH);
-        const codeVerifier = oauth.generateCodeVerifier(OAUTH.CODE_VERIFIER_DEFAULT_LENGTH);
-        const codeChallenge = await oauth.createS256CodeChallenge(
-            codeVerifier,
-            OAUTH.GOOGLE.PKCE_CODE_CHALLENGE_METHOD == 'S256',
-        );
+        const state = randomString(OAUTH.STATE_DEFAULT_LENGTH);
+        const codeVerifier = generateCodeVerifier();
+        const codeChallenge = await generateS256CodeChallenge(codeVerifier);
 
         const queryParams = new URLSearchParams({
             scope: OAUTH.GOOGLE.SCOPES.join(' '),
@@ -32,7 +30,7 @@ function LoginButton() {
         });
 
         const googleAuthorizeUrl = OAUTH.GOOGLE.AUTHORIZE_ENDPOINT + '?' + queryParams.toString();
-        httpClient.redirect(googleAuthorizeUrl);
+        client.redirect(googleAuthorizeUrl);
     };
 
     return (

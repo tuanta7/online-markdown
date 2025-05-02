@@ -8,7 +8,7 @@ function Navbar() {
                 <ThemeController />
             </div>
             <div className="navbar-center">
-                <a className="text-lg btn btn-ghost p-0 no-animation hover:bg-transparent">Tokpok Workspace</a>
+                <a className="text-lg btn btn-ghost p-0 no-animation hover:bg-transparent">Gookie Workspace</a>
             </div>
             <div className="navbar-end">
                 <LoginButton />

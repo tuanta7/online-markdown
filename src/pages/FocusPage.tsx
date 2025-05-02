@@ -1,4 +1,4 @@
-import PomodoroTimer from '../features/workspace/PomodoroTimer.tsx';
+import PomodoroTimer from '../components/PomodoroTimer.tsx';
 
 function FocusPage() {
     return (

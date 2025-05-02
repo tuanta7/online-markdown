@@ -1,33 +1,39 @@
 import { useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { httpClient } from '../../common/utils.ts';
-import { API } from '../../common/constants.ts';
+import { client } from '../../common/request.ts';
+import { OAUTH } from '../../common/constants.ts';
 
-type Response = {
+type TokenResponse = {
     accessToken: string;
 };
 
-type Arguments = {
+type TokenRequest = {
     authorizationCode: string;
     codeVerifier: string;
+    redirectUri: string;
 };
 
 function RedirectPage() {
-    const { mutate, isPending } = useMutation<Response, Error, Arguments>({
-        mutationFn: ({ authorizationCode, codeVerifier }: Arguments): Promise<Response> => {
-            return httpClient.sendRequest<Response>('POST', API.BASE_URL + '/google/token', {
-                authorizationCode,
-                codeVerifier,
+    const { mutate, isPending } = useMutation<TokenResponse, Error, TokenRequest>({
+        mutationFn: (req: TokenRequest): Promise<TokenResponse> => {
+            return client.sendRequest<TokenResponse>('POST', '/token', {
+                authorizationCode: req.authorizationCode,
+                codeVerifier: req.codeVerifier,
+                redirectUri: req.redirectUri,
             });
         },
-        onSuccess: (data: Response) => {
+        onSuccess: (data: TokenResponse) => {
             console.log(data.accessToken);
-            httpClient.redirect('/');
+            client.redirect('/');
         },
     });
 
     useEffect(() => {
-        mutate({ authorizationCode: '', codeVerifier: '' });
+        mutate({
+            authorizationCode: '',
+            codeVerifier: '',
+            redirectUri: OAUTH.GOOGLE.REDIRECT_URI,
+        });
     }, [mutate]);
 
     return (

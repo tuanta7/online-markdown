@@ -4,9 +4,7 @@ export const THEMES = {
 };
 
 export const OAUTH = {
-    CODE_VERIFIER_MIN_LENGTH: 43,
-    CODE_VERIFIER_MAX_LENGTH: 128,
-    CODE_VERIFIER_DEFAULT_LENGTH: 80,
+    CODE_VERIFIER_LENGTH: 80,
     STATE_DEFAULT_LENGTH: 16,
     GOOGLE: {
         AUTHORIZE_ENDPOINT: 'https://accounts.google.com/o/oauth2/v2/auth',
