@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
 import PomodoroTimer from '../components/PomodoroTimer.tsx';
-import TaskList from '../features/tasks/TaskList.tsx';
 
 import 'github-markdown-css/github-markdown.css';
 import 'katex/dist/katex.min.css';
@@ -12,10 +11,14 @@ export const Route = createFileRoute('/workspace')({
 
 function RouteComponent() {
     return (
-        <div className="w-full h-max flex max-md:flex-col gap-6 p-3 justify-between">
-            <div className="flex flex-col gap-6">
+        <div className="w-full h-fit py-3 px-6">
+            <div className="flex gap-3 mb-6">
+                <img
+                    src="/public/lake.png"
+                    className="object-cover object-center h-[250px] w-full border-1 border-neutral-600 rounded-lg"
+                />
                 <PomodoroTimer />
-                <TaskList />
+                <PomodoroTimer />
             </div>
             <Editor />
         </div>

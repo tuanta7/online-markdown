@@ -90,15 +90,15 @@ function PomodoroTimer() {
     };
 
     return (
-        <div className="w-full min-w-max flex flex-col p-3 gap-3 rounded-xl">
+        <div className="min-w-fit max-md:w-full flex flex-col p-3 gap-3 border-2 border-neutral-600 rounded-lg">
             <progress
                 className="progress"
                 value={timerState.remainingSeconds}
                 max={timerState.isBreaking ? settings.break * 60 : settings.focus * 60}
             />
-            <div className="flex items-center justify-between gap-3">
-                <div className="text-7xl font-semibold">{timeDisplay(timerState.remainingSeconds)}</div>
-                <div className="flex flex-col justify-between gap-3">
+            <div className="flex items-center justify-between gap-3 px-2">
+                <div className="text-4xl font-semibold">{timeDisplay(timerState.remainingSeconds)}</div>
+                <div className="flex justify-between gap-3">
                     <Button className="btn btn-sm" onClick={handleAddTime}>
                         + 5 min
                     </Button>
@@ -127,7 +127,7 @@ function TimerSettingsPanel({ settings, onSettingsChange, isRunning, onFocusChan
             <input type="checkbox" />
             <div className="collapse-title flex items-center gap-2">
                 <ClockIcon className="w-4 h-4" />
-                <span className="text-sm font-semibold">Settings</span>
+                <span className="text-xs font-semibold">Settings</span>
             </div>
             <div className="collapse-content flex flex-col gap-3">
                 <div className="flex items-center justify-between gap-6">

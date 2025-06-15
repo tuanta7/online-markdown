@@ -9,10 +9,6 @@ function TaskList() {
     const mockLists: Task[] = [
         { id: '111111111', done: false },
         { id: '222222222', done: false },
-        { id: '333333333', done: false },
-        { id: '111111111', done: false },
-        { id: '222222222', done: false },
-        { id: '333333333', done: false },
     ];
     return (
         <div className="py-3 pl-3">

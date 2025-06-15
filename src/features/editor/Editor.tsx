@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import MonacoEditor from '@monaco-editor/react';
-import { editor } from 'monaco-editor';
 
 import {
     FolderOpenIcon,
@@ -53,18 +52,8 @@ function Editor() {
         return () => document.removeEventListener('keydown', keydownHandler);
     }, [contents]);
 
-    const editorRef = useRef<editor.IEditor | null>(null);
-    useEffect(() => {
-        const onResize = () => {
-            editorRef.current?.layout();
-        };
-
-        window.addEventListener('resize', onResize);
-        return () => window.removeEventListener('resize', onResize);
-    });
-
     return (
-        <div className="w-full min-h-max  flex flex-col gap-3">
+        <div className="w-full flex flex-col gap-3">
             <div className="flex flex-wrap-reverse justify-between gap-2">
                 <div className="flex flex-wrap gap-2 items-center">
                     <button className="btn btn-sm w-10">
@@ -123,14 +112,11 @@ function Editor() {
             ) : (
                 <MonacoEditor
                     className="border-2 border-neutral-600 rounded-lg overflow-hidden"
-                    height="100%"
+                    height="80vh"
                     width="100%"
                     defaultLanguage="markdown"
                     value={contents}
                     onChange={onContentsChange}
-                    onMount={(editor) => {
-                        editorRef.current = editor;
-                    }}
                     theme="vs-dark"
                     options={{
                         minimap: { enabled: false },
