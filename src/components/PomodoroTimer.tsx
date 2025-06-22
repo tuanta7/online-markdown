@@ -90,23 +90,23 @@ function PomodoroTimer() {
     };
 
     return (
-        <div className="min-w-fit max-md:w-full flex flex-col p-3 gap-3 border-1 border-neutral-600 rounded-lg">
+        <div className="flex max-h-[200px] min-w-fit flex-col gap-3 rounded-lg border-1 border-neutral-600 p-3 max-md:w-full">
             <progress
                 className="progress"
                 value={timerState.remainingSeconds}
                 max={timerState.isBreaking ? settings.break * 60 : settings.focus * 60}
             />
             <div className="flex items-center justify-between gap-3 px-2">
-                <div className="text-4xl font-semibold">{timeDisplay(timerState.remainingSeconds)}</div>
+                <div className="text-5xl font-semibold">{timeDisplay(timerState.remainingSeconds)}</div>
                 <div className="flex justify-between gap-3">
-                    <Button className="btn btn-sm" onClick={handleAddTime}>
+                    <Button className="btn" onClick={handleAddTime}>
                         + 5 min
                     </Button>
-                    <Button className="btn btn-sm" onClick={handleCountdown}>
+                    <Button className="btn" onClick={handleCountdown}>
                         {timerState.isRunning ? (
-                            <PauseCircleIcon className="w-4 h-4" />
+                            <PauseCircleIcon className="h-4 w-4" />
                         ) : (
-                            <PlayIcon className="w-4 h-4" />
+                            <PlayIcon className="h-4 w-4" />
                         )}
                     </Button>
                 </div>
@@ -123,15 +123,15 @@ function PomodoroTimer() {
 
 function TimerSettingsPanel({ settings, onSettingsChange, isRunning, onFocusChange }: TimerSettingsPanelProps) {
     return (
-        <div className="collapse bg-base-200">
+        <div className="bg-base-200 collapse">
             <input type="checkbox" />
             <div className="collapse-title flex items-center gap-2">
-                <ClockIcon className="w-4 h-4" />
+                <ClockIcon className="h-4 w-4" />
                 <span className="text-xs font-semibold">Settings</span>
             </div>
             <div className="collapse-content flex flex-col gap-3">
                 <div className="flex items-center justify-between gap-6">
-                    <span className="font-semibold text-sm">Focus</span>
+                    <span className="text-sm font-semibold">Focus</span>
                     <div className="grid grid-cols-3 gap-3">
                         <MinutesSelector
                             setSelected={(val) => {
@@ -145,7 +145,7 @@ function TimerSettingsPanel({ settings, onSettingsChange, isRunning, onFocusChan
                     </div>
                 </div>
                 <div className="flex items-center justify-between gap-6">
-                    <span className="font-semibold text-sm">Break</span>
+                    <span className="text-sm font-semibold">Break</span>
                     <div className="grid grid-cols-3 gap-3">
                         <MinutesSelector
                             setSelected={(val) => onSettingsChange({ ...settings, break: val })}
@@ -164,7 +164,7 @@ function MinutesSelector({ setSelected, minutes, disabled, selected }: MinutesSe
     return minutes.map((m) => (
         <Button
             key={m}
-            className={`btn btn-sm border border-neutral-600 w-16 ${
+            className={`btn btn-sm w-16 border border-neutral-600 ${
                 m === selected ? 'bg-primary text-primary-content' : ''
             }`}
             onClick={() => setSelected(m)}

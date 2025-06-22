@@ -12,14 +12,13 @@ export const Route = createFileRoute('/workspace')({
 
 function RouteComponent() {
     return (
-        <div className="w-full h-fit py-3 px-6">
-            <div className="flex max-lg:flex-col gap-4 mb-6">
-                <TaskList />
-                <div className="w-full border-1 border-neutral-600 rounded-lg overflow-hidden">
-                    <img src="/public/lake.png" className="object-cover object-center h-[120px] w-full" />
-                    <div>Music Player</div>
+        <div className="h-fit w-full px-6 py-3">
+            <div className="mb-6 flex flex-wrap gap-4">
+                <div className="max-h-[200px] flex-1 overflow-hidden rounded-lg border">
+                    <img src="/lake.png" className="h-[200px] w-full object-cover object-center" />
                 </div>
                 <PomodoroTimer />
+                <TaskList />
             </div>
             <Editor />
         </div>
