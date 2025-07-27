@@ -3,9 +3,55 @@ import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import { useQuery } from '@tanstack/react-query';
+
+import { sleep } from '../../utils/mock';
+import { Fragment } from 'react';
 
 interface PreviewProps {
     contents: string;
+}
+
+function MarkdownImage({ src = '', alt, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) {
+    // TODO: Get images data mapping from the current opening documents
+    const images: Record<string, string> = {
+        'minio.png': 'uuid-123e4567-e89b-12d3-a456-426614174000',
+    };
+
+    const imageId = images[src];
+
+    const { data: url, isFetching } = useQuery({
+        queryKey: ['url', imageId],
+        queryFn: async () => {
+            // const res = await fetch(`/api/images/${imageId}/presign`);
+            // const json = await res.json();
+            // return json.url as string;
+            await sleep(3000); // Mock API call
+            return 'https://cdn-images-1.medium.com/max/2400/0*QudNr5xo7HArqDlR';
+        },
+        enabled: Boolean(imageId),
+    });
+
+    let contents = (
+        <Fragment>
+            <span className="loading loading-infinity loading-md"></span>
+            <span>{src} is loading</span>
+        </Fragment>
+    );
+
+    if (!isFetching) {
+        contents = (
+            <img
+                {...props}
+                src={url}
+                alt={alt}
+                className="h-auto max-w-full rounded-lg object-contain"
+                style={{ maxHeight: '300px' }}
+            />
+        );
+    }
+
+    return <span className="flex flex-col items-center justify-center">{contents}</span>;
 }
 
 function Preview({ contents }: PreviewProps) {
@@ -15,15 +61,20 @@ function Preview({ contents }: PreviewProps) {
                 remarkPlugins={[remarkGfm, remarkMath]}
                 rehypePlugins={[rehypeHighlight, rehypeKatex]}
                 components={{
-                    img: ({ ...props }) => (
-                        <div className="flex justify-center">
-                            <img
-                                {...props}
-                                className="h-auto max-w-full rounded-lg object-contain"
-                                style={{ maxHeight: '300px' }}
-                            />
-                        </div>
-                    ),
+                    img: ({ ...props }) => {
+                        if (props.src?.startsWith('http://') || props.src?.startsWith('https://')) {
+                            return (
+                                <span className="flex justify-center">
+                                    <img
+                                        {...props}
+                                        className="h-auto max-w-full rounded-lg object-contain"
+                                        style={{ maxHeight: '300px' }}
+                                    />
+                                </span>
+                            );
+                        }
+                        return <MarkdownImage {...props} />;
+                    },
                 }}
             >
                 {contents}
