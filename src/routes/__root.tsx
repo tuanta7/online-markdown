@@ -1,19 +1,19 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import MainLayout from '../features/layouts/MainLayout.tsx';
-import { Toaster } from 'sonner';
+
 import { HomeIcon } from '@heroicons/react/24/outline';
-import { TOAST_DURATION } from '../utils/constants';
+
 import { Fragment } from 'react/jsx-runtime';
 
 export const Route = createRootRoute({
     component: RootComponent,
     notFoundComponent: () => (
-        <div className="flex flex-col items-center justify-center h-[70vh] gap-2">
+        <div className="flex h-[70vh] flex-col items-center justify-center gap-2">
             <h1 className="text-4xl font-bold">404</h1>
             <p className="text-xl">Page not found</p>
             <button className="btn btn-secondary mt-4" onClick={() => (window.location.href = '/')}>
-                <HomeIcon className="w-4 h-4" /> Go back
+                <HomeIcon className="h-4 w-4" /> Go back
             </button>
         </div>
     ),
@@ -25,7 +25,6 @@ function RootComponent() {
             <MainLayout>
                 <Outlet />
             </MainLayout>
-            <Toaster position="bottom-right" toastOptions={{ duration: TOAST_DURATION }} />
             <TanStackRouterDevtools position="bottom-right" />
         </Fragment>
     );

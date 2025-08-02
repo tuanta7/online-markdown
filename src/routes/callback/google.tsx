@@ -31,7 +31,10 @@ function GoogleCallback() {
 
     const { mutate: exchangeToken } = useMutation<TokenResponse, Error, TokenRequest>({
         mutationFn: (body: TokenRequest): Promise<TokenResponse> => {
-            return apiClient.sendRequest<TokenResponse>('POST', '/login/google', body);
+            return apiClient.sendRequest<TokenResponse>('POST', '/login/google', {
+                data: body,
+                withCredentials: true,
+            });
         },
         onSuccess: (data: TokenResponse) => {
             exchangeState.current = 'completed';
@@ -52,22 +55,28 @@ function GoogleCallback() {
     });
 
     useEffect(() => {
-        // Skip if we're already processing or completed
         if (exchangeState.current !== 'idle') return;
 
         const url = new URL(window.location.href);
-        const code = url.searchParams.get('code');
-
-        if (!code) {
+        const receivedState = url.searchParams.get('state');
+        const state = sessionStorage.getItem('state');
+        if (state !== receivedState) {
             toast.error('Login failed', {
                 onAutoClose: onToastClose,
             });
             return;
         }
 
-        const receivedState = url.searchParams.get('state');
-        const state = sessionStorage.getItem('state');
-        if (state !== receivedState) {
+        const err = url.searchParams.get('error');
+        if (err != null) {
+            toast.error('Login failed: ' + err, {
+                onAutoClose: onToastClose,
+            });
+            return;
+        }
+
+        const code = url.searchParams.get('code');
+        if (!code) {
             toast.error('Login failed', {
                 onAutoClose: onToastClose,
             });
@@ -91,7 +100,7 @@ function GoogleCallback() {
     }, [exchangeToken]);
 
     return (
-        <div className="flex flex-col items-center justify-center h-[70vh] gap-2">
+        <div className="flex h-[90vh] flex-col items-center justify-center gap-2">
             <div className="flex items-end gap-2">
                 <span className="loading loading-infinity loading-xl"></span>
                 <span className="text-xl font-bold">Signing you in...</span>
