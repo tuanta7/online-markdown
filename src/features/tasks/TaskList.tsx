@@ -27,18 +27,18 @@ function TaskList() {
     const { data } = useQuery<TaskListResponse>({
         queryKey: ['tasks', page],
         queryFn: () => {
-            return apiClient.sendRequest('GET', `/tasks?page=${page}&pageSize=5`, {
+            return apiClient.sendRequest('GET', `/tasks?page=${page}&pageSize=3`, {
                 withCredentials: true,
             });
         },
         retry: 3,
     });
 
-    const totalPages = data ? Math.ceil(data.total / 5) : 1;
+    const totalPages = data ? Math.ceil(data.total / 3) : 1;
 
     return (
         <div className="w-full py-2 pl-2">
-            <div className="mb-3 flex items-center gap-3 px-2">
+            <div className="mb-6 flex items-center gap-3 px-2">
                 <h2 className="flex-1 text-lg font-bold">To-do List</h2>
                 <div className="ml-auto flex items-center gap-2">
                     <button

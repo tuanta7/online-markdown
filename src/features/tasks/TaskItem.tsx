@@ -3,6 +3,7 @@ import { Task } from './TaskList';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../../services/apiClient';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import { toast } from 'sonner';
 
 interface TaskItemProps {
     task: Task;
@@ -34,8 +35,10 @@ function TaskItem({ task }: TaskItemProps) {
             });
         },
         onSuccess: () => {
+            toast.success('Success');
             queryClient.invalidateQueries({ queryKey: ['tasks'] });
         },
+        onError: () => {},
     });
 
     return (
