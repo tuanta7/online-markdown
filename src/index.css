@@ -14,3 +14,12 @@
     flex: 1;
     min-width: 0;
 }
+
+.input:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: inherit !important;
+}
