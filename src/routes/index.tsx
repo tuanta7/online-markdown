@@ -8,7 +8,7 @@ function Index() {
     const navigate = useNavigate({});
 
     return (
-        <div>
+        <div className="flex h-full items-center justify-center">
             <button
                 className="btn btn-success"
                 onClick={() => {

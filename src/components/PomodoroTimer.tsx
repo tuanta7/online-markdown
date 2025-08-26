@@ -116,12 +116,7 @@ function PomodoroTimer() {
                     max={timerState.isBreaking ? settings.break * 60 : settings.focus * 60}
                 />
             </div>
-            <div
-                className="mx-3 flex items-center justify-between gap-2 border-b-1 px-1 pb-6"
-                style={{
-                    borderImage: 'linear-gradient(90deg, #34d399 0%, #fbbf24 50%, #f87171 100%) 1',
-                }}
-            >
+            <div className="py mx-3 flex items-center justify-between gap-2 px-1 pb-3">
                 <div className="flex flex-col">
                     <div className="mb-2 text-6xl font-semibold">{timeDisplay(timerState.remainingSeconds)}</div>
                     <div className="text-sm font-semibold text-gray-500">

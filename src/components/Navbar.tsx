@@ -1,20 +1,26 @@
 import { ChangeEvent, useState } from 'react';
-import { Bars3Icon, SunIcon, MoonIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, SunIcon, MoonIcon, ChevronLeftIcon } from '@heroicons/react/24/outline';
 
 import { THEMES } from '../utils/constants.ts';
 
 interface NavbarProps {
     element: React.ReactNode;
+    openSideBar: boolean;
+    setOpenSideBar: (open: boolean) => void;
 }
 
-function Navbar({ element }: NavbarProps) {
+function Navbar({ element, openSideBar, setOpenSideBar }: NavbarProps) {
     return (
         <nav className="navbar flex items-center justify-between px-6 py-3">
             <div className="navbar-start">
-                <button className="btn btn-sm btn-ghost hover:text-primary border-0 p-0 hover:bg-transparent">
-                    <Bars3Icon className="w-6" />
+                <button
+                    className="btn btn-sm btn-ghost hover:text-primary border-0 p-0 hover:bg-transparent"
+                    onClick={() => setOpenSideBar(!openSideBar)}
+                    aria-label={openSideBar ? 'Close sidebar' : 'Open sidebar'}
+                >
+                    {openSideBar ? <ChevronLeftIcon className="w-5" /> : <Bars3Icon className="w-6" />}
                 </button>
-                <a href="/" className="btn btn-ghost no-animation mx-2 border-0 p-0 text-xl hover:bg-transparent">
+                <a href="/" className="btn btn-ghost no-animation mx-2 border-0 text-xl hover:bg-transparent">
                     Jod Workspace
                 </a>
             </div>
