@@ -2,14 +2,17 @@ import { ChangeEvent, useState } from 'react';
 import { Bars3Icon, SunIcon, MoonIcon, ChevronLeftIcon } from '@heroicons/react/24/outline';
 
 import { THEMES } from '../utils/constants.ts';
+import { useUserStore } from '../store/userStore';
+import UserProfileAvatar from './UserProfileAvatar';
+import LoginButton from '../features/auth/LoginButton';
 
 interface NavbarProps {
-    element: React.ReactNode;
     openSideBar: boolean;
     setOpenSideBar: (open: boolean) => void;
 }
 
-function Navbar({ element, openSideBar, setOpenSideBar }: NavbarProps) {
+function Navbar({ openSideBar, setOpenSideBar }: NavbarProps) {
+    const user = useUserStore((s) => s.user);
     return (
         <nav className="navbar flex items-center justify-between px-6 py-3">
             <div className="navbar-start">
@@ -20,13 +23,13 @@ function Navbar({ element, openSideBar, setOpenSideBar }: NavbarProps) {
                 >
                     {openSideBar ? <ChevronLeftIcon className="w-5" /> : <Bars3Icon className="w-6" />}
                 </button>
-                <a href="/" className="btn btn-ghost no-animation mx-2 border-0 text-xl hover:bg-transparent">
+                <a href="/" className="btn btn-ghost no-animation mx-2 border-0 text-2xl hover:bg-transparent">
                     Jod Workspace
                 </a>
             </div>
             <div className="navbar-end gap-3">
                 <ThemeController />
-                {element}
+                {user ? <UserProfileAvatar user={user} /> : <LoginButton />}
             </div>
         </nav>
     );
@@ -50,10 +53,10 @@ function ThemeController() {
                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleToggle(e)}
             />
             <span className="swap-off">
-                <SunIcon className="h-6 w-6" />
+                <SunIcon className="h-7 w-7" />
             </span>
             <span className="swap-on flex items-center">
-                <MoonIcon className="h-5 w-5" />
+                <MoonIcon className="h-6 w-6" />
             </span>
         </label>
     );

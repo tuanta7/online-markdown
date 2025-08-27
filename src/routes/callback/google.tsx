@@ -17,6 +17,7 @@ type TokenRequest = {
     authorizationCode: string;
     codeVerifier: string;
     redirectUri: string;
+    provider: string;
 };
 
 function GoogleCallback() {
@@ -31,7 +32,7 @@ function GoogleCallback() {
 
     const { mutate: exchangeToken } = useMutation<TokenResponse, Error, TokenRequest>({
         mutationFn: (body: TokenRequest): Promise<TokenResponse> => {
-            return apiClient.sendRequest<TokenResponse>('POST', '/login/google', {
+            return apiClient.sendRequest<TokenResponse>('POST', '/oauth/token', {
                 data: body,
                 withCredentials: true,
             });
@@ -96,6 +97,7 @@ function GoogleCallback() {
             authorizationCode: code,
             codeVerifier: codeVerifier,
             redirectUri: OAUTH.GOOGLE.REDIRECT_URI,
+            provider: OAUTH.GOOGLE.PROVIDER_NAME,
         });
     }, [exchangeToken]);
 

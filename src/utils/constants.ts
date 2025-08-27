@@ -9,6 +9,7 @@ export const OAUTH = {
     CODE_VERIFIER_LENGTH: 80,
     STATE_LENGTH: 16,
     GOOGLE: {
+        PROVIDER_NAME: 'google',
         AUTHORIZE_ENDPOINT: 'https://accounts.google.com/o/oauth2/v2/auth',
         PKCE_CODE_CHALLENGE_METHOD: 'S256',
         SCOPES: [
