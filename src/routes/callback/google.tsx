@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { apiClient } from '../../services/apiClient';
 import { toast } from 'sonner';
-import { OAUTH } from '../../utils/constants';
+import { OAUTH } from '../../utils/config';
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 

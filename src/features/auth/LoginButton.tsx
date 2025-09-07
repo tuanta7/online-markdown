@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { OAUTH } from '../../utils/constants.ts';
+import { OAUTH } from '../../utils/config.ts';
 import { apiClient } from '../../services/apiClient.ts';
 import { generateCodeVerifier, generateS256CodeChallenge, generateState } from '../../utils/oauth.ts';
 

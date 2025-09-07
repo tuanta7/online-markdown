@@ -1,5 +1,5 @@
 import request, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
-import { API } from '../utils/constants.ts';
+import { API } from '../utils/config.ts';
 
 function redirect(target: string): void {
     window.location.replace(target);

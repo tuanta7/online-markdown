@@ -1,5 +1,5 @@
 import { randomString } from './random.ts';
-import { OAUTH } from './constants.ts';
+import { OAUTH } from './config.ts';
 
 function generateState(): string {
     return randomString(OAUTH.STATE_LENGTH);
