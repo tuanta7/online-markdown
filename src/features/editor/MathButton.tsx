@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { EditorView } from '@codemirror/view';
 import { VariableIcon } from '@heroicons/react/24/outline';
-import { editor } from 'monaco-editor';
 
 const MATH_SNIPPETS = [
     {
@@ -21,42 +21,53 @@ const MATH_SNIPPETS = [
 ];
 
 interface MathButtonProps {
-    editorRef: React.MutableRefObject<editor.IStandaloneCodeEditor | null>;
+    editorRef: React.MutableRefObject<EditorView | null>;
 }
 
 function MathButton({ editorRef }: MathButtonProps) {
     const [open, setOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        function handleClick(e: MouseEvent) {
+            if (open && dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+                setOpen(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClick);
+        return () => document.removeEventListener('mousedown', handleClick);
+    }, [open]);
 
     const insertSnippet = (snippet: string) => {
-        if (!editorRef.current) return;
-
-        const editor = editorRef.current;
-        const pos = editor.getPosition();
-        const model = editor.getModel();
-
-        if (!pos || !model) return;
-
-        editor.executeEdits('insert-math', [
-            {
-                range: {
-                    startLineNumber: pos.lineNumber,
-                    startColumn: pos.column,
-                    endLineNumber: pos.lineNumber,
-                    endColumn: pos.column,
-                },
-                text: `$${snippet}$`,
+        const view = editorRef.current;
+        if (!view) return;
+        const { state } = view;
+        const selection = state.selection.main;
+        const tr = state.update({
+            changes: {
+                from: selection.from,
+                to: selection.to,
+                insert: `$${snippet}$`,
             },
-        ]);
-        editor.focus();
+            selection: { anchor: selection.from + 1, head: selection.from + 1 + snippet.length },
+        });
+        view.dispatch(tr);
+        view.focus();
         setOpen(false);
     };
 
     return (
-        <div className="dropdown" onClick={() => setOpen(!open)} tabIndex={0}>
-            <div className="btn" aria-label="Insert math equation">
+        <div className="dropdown dropdown-top" ref={dropdownRef}>
+            <button
+                className="btn btn-sm"
+                type="button"
+                tabIndex={0}
+                onClick={() => setOpen((v) => !v)}
+                aria-label="Insert math equation"
+            >
                 <VariableIcon className="h-4 w-4" />
                 <span className="hidden md:inline">Math</span>
-            </div>
+            </button>
             {open && (
                 <ul className="dropdown-content menu bg-base-100 rounded-box z-50 mt-2 w-64 shadow-lg">
                     {MATH_SNIPPETS.map((item) => (

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import MonacoEditor from '@monaco-editor/react';
-import { editor } from 'monaco-editor';
+import CodeMirror from '@uiw/react-codemirror';
+import { EditorView } from '@codemirror/view';
+import { markdown } from '@codemirror/lang-markdown';
 
 import {
     FolderOpenIcon,
@@ -29,15 +30,13 @@ import MathButton from './MathButton';
 function Editor() {
     const [preview, setPreview] = useState(false);
     const [contents, setContents] = useState(localStorage.getItem('file-name-contents') || '');
-    const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
 
-    const onEditorMount = (editor: editor.IStandaloneCodeEditor) => {
-        editorRef.current = editor;
-    };
+    // For codemirror, we don't need a ref for the editor instance for basic usage
+    const editorRef = useRef<EditorView | null>(null);
 
-    const onContentsChange = (value: string | undefined) => {
-        setContents(value || '');
-        localStorage.setItem('file-name-contents', value || '');
+    const onContentsChange = (value: string) => {
+        setContents(value);
+        localStorage.setItem('file-name-contents', value);
     };
 
     useEffect(() => {
@@ -50,18 +49,25 @@ function Editor() {
                     tabWidth: 4,
                     plugins: [parserMarkdown],
                 });
-                onContentsChange(formatted);
+                setContents(formatted);
+                localStorage.setItem('file-name-contents', formatted);
             }
         };
-
         document.addEventListener('keydown', keydownHandler);
         return () => document.removeEventListener('keydown', keydownHandler);
     }, [contents]);
+
+    const paddingTheme = EditorView.theme({
+        '&.cm-editor .cm-scroller': {
+            padding: '16px',
+        },
+    });
 
     return (
         <div className="flex w-full flex-col gap-3">
             <div className="flex flex-wrap-reverse justify-between gap-2">
                 <div className="flex flex-wrap items-center gap-2">
+                    {/* You will need to update BoldButton, MathButton, etc. to work with CodeMirror if they use Monaco APIs */}
                     <BoldButton editorRef={editorRef} />
                     <button className="btn">
                         <ItalicIcon className="h-4 w-4" />
@@ -112,25 +118,20 @@ function Editor() {
             {preview ? (
                 <Preview contents={contents} />
             ) : (
-                <MonacoEditor
-                    className="overflow-hidden rounded-lg border-2 border-neutral-600"
+                <CodeMirror
+                    onCreateEditor={(view) => {
+                        editorRef.current = view;
+                    }}
+                    value={contents}
                     height="80vh"
                     width="100%"
-                    defaultLanguage="markdown"
-                    value={contents}
-                    onChange={onContentsChange}
-                    onMount={onEditorMount}
-                    theme="vs-dark"
-                    options={{
-                        fontSize: 16,
-                        minimap: { enabled: false },
-                        padding: { top: 20, bottom: 20 },
-                        smoothScrolling: true,
-                        automaticLayout: true,
-                        wordWrap: 'on',
-                        wordBreak: 'keepAll',
-                        wrappingStrategy: 'advanced',
+                    theme="dark"
+                    extensions={[markdown(), paddingTheme]}
+                    onChange={(value) => onContentsChange(value)}
+                    style={{
+                        fontSize: '16px',
                     }}
+                    className="overflow-hidden rounded-lg border-2 border-neutral-600"
                 />
             )}
         </div>

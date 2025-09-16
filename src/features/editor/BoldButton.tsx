@@ -1,42 +1,39 @@
-import { editor } from 'monaco-editor';
+import { EditorView } from '@codemirror/view';
 import { BoldIcon } from '@heroicons/react/24/outline';
 
 interface BoldButtonProps {
-    editorRef: React.MutableRefObject<editor.IStandaloneCodeEditor | null>;
+    editorRef: React.MutableRefObject<EditorView | null>;
 }
 
 function BoldButton({ editorRef }: BoldButtonProps) {
     const insertBoldText = () => {
-        if (!editorRef.current) return;
-
-        const editor = editorRef.current;
-        const selection = editor.getSelection();
-        const model = editor.getModel();
-
-        if (!selection || !model) return;
-
-        const selectedText = model.getValueInRange(selection);
+        const view = editorRef.current;
+        if (!view) return;
+        const { state } = view;
+        const selection = state.selection.main;
+        const selectedText = state.sliceDoc(selection.from, selection.to);
+        let tr;
         if (selectedText) {
-            const boldText = `**${selectedText}**`;
-            editor.executeEdits('insert-bold', [
-                {
-                    range: selection,
-                    text: boldText,
+            tr = state.update({
+                changes: {
+                    from: selection.from,
+                    to: selection.to,
+                    insert: `**${selectedText}**`,
                 },
-            ]);
-
-            const newPosition = {
-                lineNumber: selection.endLineNumber,
-                column: selection.endColumn + 4,
-            };
-            editor.setPosition(newPosition);
+                selection: { anchor: selection.from + 2, head: selection.to + 2 },
+            });
+        } else {
+            tr = state.update({
+                changes: { from: selection.from, to: selection.to, insert: '****' },
+                selection: { anchor: selection.from + 2 },
+            });
         }
-
-        editor.focus();
+        view.dispatch(tr);
+        view.focus();
     };
 
     return (
-        <button className="btn btn-sm w-10" onClick={insertBoldText}>
+        <button className="btn btn-sm w-10" type="button" onClick={insertBoldText}>
             <BoldIcon className="h-4 w-4" />
         </button>
     );
