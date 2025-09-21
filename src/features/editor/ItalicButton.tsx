@@ -1,13 +1,13 @@
 import { EditorView } from '@codemirror/view';
-import { BoldIcon } from '@heroicons/react/24/outline';
+import { ItalicIcon } from '@heroicons/react/24/outline';
 
-interface BoldButtonProps {
+interface ItalicButtonProps {
     editorRef: React.MutableRefObject<EditorView | null>;
     className?: string;
 }
 
-function BoldButton({ editorRef, className }: BoldButtonProps) {
-    const insertBoldText = () => {
+function ItalicButton({ editorRef, className }: ItalicButtonProps) {
+    const insertItalicText = () => {
         const view = editorRef.current;
         if (!view) return;
         const { state } = view;
@@ -19,14 +19,14 @@ function BoldButton({ editorRef, className }: BoldButtonProps) {
                 changes: {
                     from: selection.from,
                     to: selection.to,
-                    insert: `**${selectedText}**`,
+                    insert: `*${selectedText}*`,
                 },
-                selection: { anchor: selection.from + 2, head: selection.to + 2 },
+                selection: { anchor: selection.from + 1, head: selection.to + 1 },
             });
         } else {
             tr = state.update({
-                changes: { from: selection.from, to: selection.to, insert: '****' },
-                selection: { anchor: selection.from + 2 },
+                changes: { from: selection.from, to: selection.to, insert: '**' },
+                selection: { anchor: selection.from + 1 },
             });
         }
         view.dispatch(tr);
@@ -34,10 +34,10 @@ function BoldButton({ editorRef, className }: BoldButtonProps) {
     };
 
     return (
-        <button className={className ? `btn ${className}` : 'btn'} type="button" onClick={insertBoldText}>
-            <BoldIcon className="h-4 w-4" />
+        <button className={className ? `btn ${className}` : 'btn'} type="button" onClick={insertItalicText}>
+            <ItalicIcon className="h-4 w-4" />
         </button>
     );
 }
 
-export default BoldButton;
+export default ItalicButton;

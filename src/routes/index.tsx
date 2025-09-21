@@ -41,7 +41,7 @@ function Home() {
 
     return (
         <div className="bg-base-100 mb-10 flex min-h-[80vh] flex-col items-center justify-center px-4 py-12">
-            <div className="mb-12 max-w-2xl text-center">
+            <div className="mb-10 max-w-2xl text-center">
                 <h1 className="text-primary mb-10 text-4xl font-extrabold md:text-5xl">
                     <span className="mb-3 block">Jod: Online Markdown with </span>
                     <span className="">{typedTitle}</span>
@@ -52,7 +52,7 @@ function Home() {
                     and more. Perfect for students, teachers, and professionals.
                 </p>
                 <button
-                    className="btn btn-primary btn-lg px-8 text-lg shadow-lg"
+                    className="btn btn-primary btn-lg m-3 w-52 text-lg shadow-lg"
                     onClick={() => {
                         navigate({
                             to: '/workspace',
@@ -62,8 +62,18 @@ function Home() {
                 >
                     Start Writing
                 </button>
+                <button
+                    className="btn btn-secondary btn-lg m-3 w-52 text-lg shadow-lg"
+                    onClick={() => {
+                        navigate({
+                            to: '/workspace',
+                            search: { file: 'new' },
+                        });
+                    }}
+                >
+                    Open From Drive
+                </button>
             </div>
-
             <div className="grid w-full max-w-4xl grid-cols-1 gap-8 md:grid-cols-3">
                 <div className="card bg-base-200 items-center gap-3 p-6 shadow-md max-md:flex-row">
                     <span className="mb-2 text-3xl">📝</span>

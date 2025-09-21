@@ -5,7 +5,6 @@ import { markdown } from '@codemirror/lang-markdown';
 
 import {
     FolderOpenIcon,
-    ItalicIcon,
     ListBulletIcon,
     CloudArrowUpIcon,
     CodeBracketIcon,
@@ -26,10 +25,14 @@ import ExportButton from './ExportButton';
 import Preview from './Preview';
 import BoldButton from './BoldButton';
 import MathButton from './MathButton';
+import ItalicButton from './ItalicButton';
+
+import { useThemeStore } from '../../store/themeStore';
 
 function Editor() {
     const [preview, setPreview] = useState(false);
     const [contents, setContents] = useState(localStorage.getItem('file-name-contents') || '');
+    const useLightTheme = useThemeStore((s) => s.useLightTheme);
 
     // For codemirror, we don't need a ref for the editor instance for basic usage
     const editorRef = useRef<EditorView | null>(null);
@@ -67,19 +70,21 @@ function Editor() {
         <div className="flex w-full flex-col gap-3">
             <div className="flex flex-wrap-reverse justify-between gap-2">
                 <div className="flex flex-wrap items-center gap-2">
-                    {/* You will need to update BoldButton, MathButton, etc. to work with CodeMirror if they use Monaco APIs */}
-                    <BoldButton editorRef={editorRef} />
-                    <button className="btn">
-                        <ItalicIcon className="h-4 w-4" />
-                    </button>
-                    <button className="btn">
-                        <StrikethroughIcon className="h-4 w-4" />
-                    </button>
+                    <div className="join rounded-2xl">
+                        <BoldButton editorRef={editorRef} className="join-item" />
+                        <ItalicButton editorRef={editorRef} className="join-item" />
+                        <button className="btn join-item">
+                            <StrikethroughIcon className="h-4 w-4" />
+                        </button>
+                    </div>
+
                     <button className="btn">
                         <ListBulletIcon className="h-4 w-4" />
+                        <span className="hidden md:inline">List</span>
                     </button>
                     <button className="btn">
                         <PhotoIcon className="h-4 w-4" />
+                        <span className="hidden md:inline">Image</span>
                     </button>
                     <button className="btn">
                         <Squares2X2Icon className="h-4 w-4" />
@@ -125,13 +130,13 @@ function Editor() {
                     value={contents}
                     height="80vh"
                     width="100%"
-                    theme="dark"
+                    theme={useLightTheme ? 'light' : 'dark'}
                     extensions={[markdown(), paddingTheme]}
                     onChange={(value) => onContentsChange(value)}
                     style={{
                         fontSize: '16px',
                     }}
-                    className="overflow-hidden rounded-lg border-2 border-neutral-600"
+                    className="overflow-hidden rounded-lg border border-neutral-600"
                 />
             )}
         </div>

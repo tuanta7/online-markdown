@@ -1,7 +1,8 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent } from 'react';
 import { Bars3Icon, SunIcon, MoonIcon, ChevronLeftIcon } from '@heroicons/react/24/outline';
 
 import { THEMES } from '../utils/constants.ts';
+import { useThemeStore } from '../store/themeStore';
 import { useUserStore } from '../store/userStore';
 import UserProfileAvatar from './UserProfileAvatar';
 import LoginButton from '../features/auth/LoginButton';
@@ -36,11 +37,11 @@ function Navbar({ openSideBar, setOpenSideBar }: NavbarProps) {
 }
 
 function ThemeController() {
-    const [check, setCheck] = useState(localStorage.getItem('use-light-theme') === 'true');
+    const useLightTheme = useThemeStore((s) => s.useLightTheme);
+    const setUseLightTheme = useThemeStore((s) => s.setUseLightTheme);
 
     const handleToggle = (e: ChangeEvent<HTMLInputElement>) => {
-        setCheck(e.target.checked);
-        localStorage.setItem('use-light-theme', String(e.target.checked));
+        setUseLightTheme(e.target.checked);
     };
 
     return (
@@ -49,8 +50,8 @@ function ThemeController() {
                 type="checkbox"
                 className="theme-controller"
                 value={THEMES.LIGHT}
-                checked={check}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => handleToggle(e)}
+                checked={useLightTheme}
+                onChange={handleToggle}
             />
             <span className="swap-off">
                 <SunIcon className="h-7 w-7" />

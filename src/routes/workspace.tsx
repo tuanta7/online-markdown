@@ -13,21 +13,26 @@ export const Route = createFileRoute('/workspace')({
 function RouteComponent() {
     return (
         <ProtectedLayout>
-            <div className="flex h-fit w-full flex-col px-6 py-3">
-                <div className="mb-6 flex flex-wrap gap-4 max-[1200px]:flex-col">
-                    <div className="max-h-[220px] flex-1 overflow-hidden rounded-lg border border-neutral-600 max-[900px]:hidden">
-                        <Gif />
+            <div className="flex h-fit w-full flex-col gap-6 px-6 py-3">
+                <div className="flex gap-6 max-md:flex-col">
+                    <div className="max-md:w-full md:max-w-88">
+                        <div className="flex h-full w-full flex-col gap-6">
+                            <div className="overflow-hidden rounded-lg max-md:hidden">
+                                <Gif />
+                            </div>
+                            <div className="rounded-lg border border-neutral-600">
+                                <PomodoroTimer />
+                            </div>
+                            <div className="rounded-lg border border-neutral-600">
+                                <TaskList />
+                            </div>
+                            <div className="flex-1 rounded-lg border border-neutral-600">Documents</div>
+                        </div>
                     </div>
-                    <div className="flex flex-1 gap-4 max-[800px]:flex-col">
-                        <div className="max-h-[220px] flex-1 rounded-lg border border-neutral-600 max-[300px]:w-full">
-                            <TaskList />
-                        </div>
-                        <div className="max-h-[220px] flex-1 rounded-lg border-1 border-neutral-600 max-[300px]:w-full">
-                            <PomodoroTimer />
-                        </div>
+                    <div className="flex-1">
+                        <Editor />
                     </div>
                 </div>
-                <Editor />
             </div>
         </ProtectedLayout>
     );

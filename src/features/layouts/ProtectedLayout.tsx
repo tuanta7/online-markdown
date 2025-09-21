@@ -8,11 +8,7 @@ function ProtectedLayout({ children }: PropsWithChildren) {
     const navigate = useNavigate();
     const googleLoginRedirect = useGoogleLoginRedirect();
 
-    useEffect(() => {
-        if (!user) {
-            googleLoginRedirect();
-        }
-    }, [navigate, user, googleLoginRedirect]);
+    useEffect(() => {}, [navigate, user, googleLoginRedirect]);
 
     return <div>{children}</div>;
 }
