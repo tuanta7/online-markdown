@@ -116,9 +116,9 @@ function PomodoroTimer() {
                     max={timerState.isBreaking ? settings.break * 60 : settings.focus * 60}
                 />
             </div>
-            <div className="py mx-3 flex items-center justify-between gap-2 px-1 pb-3">
+            <div className="py mx-3 flex items-center justify-between gap-2 px-1">
                 <div className="flex flex-col">
-                    <div className="mb-2 text-6xl font-semibold">{timeDisplay(timerState.remainingSeconds)}</div>
+                    <div className="mb-1 text-5xl font-semibold">{timeDisplay(timerState.remainingSeconds)}</div>
                     <div className="text-sm font-semibold text-gray-500">
                         {timerState.isBreaking ? 'Break' : 'Focus'} - Loop {timerState.currentLoop}/{settings.loops}
                     </div>

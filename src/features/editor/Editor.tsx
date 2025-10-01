@@ -4,7 +4,6 @@ import { EditorView } from '@codemirror/view';
 import { markdown } from '@codemirror/lang-markdown';
 
 import {
-    FolderOpenIcon,
     ListBulletIcon,
     CloudArrowUpIcon,
     CodeBracketIcon,
@@ -110,10 +109,6 @@ function Editor() {
                         <span className="hidden md:inline">Save</span>
                     </button>
                     <button className="btn">
-                        <FolderOpenIcon className="h-4 w-4" />
-                        <span className="hidden md:inline">Open</span>
-                    </button>
-                    <button className="btn">
                         <ArrowUpTrayIcon className="h-4 w-4" />
                         <span className="hidden md:inline">Upload</span>
                     </button>
@@ -128,7 +123,7 @@ function Editor() {
                         editorRef.current = view;
                     }}
                     value={contents}
-                    height="80vh"
+                    height="100%"
                     width="100%"
                     theme={useLightTheme ? 'light' : 'dark'}
                     extensions={[markdown(), paddingTheme]}
@@ -136,7 +131,7 @@ function Editor() {
                     style={{
                         fontSize: '16px',
                     }}
-                    className="overflow-hidden rounded-lg border border-neutral-600"
+                    className="h-full overflow-hidden rounded-lg border border-neutral-600"
                 />
             )}
         </div>

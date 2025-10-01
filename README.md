@@ -22,7 +22,7 @@ Install NodeJS
 
 ```shell
 nvm list
-nvm install --lts 
+nvm install --lts
 ```
 
 ## Sources

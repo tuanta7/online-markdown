@@ -56,7 +56,7 @@ function MarkdownImage({ src = '', alt, ...props }: React.ImgHTMLAttributes<HTML
 
 function Preview({ contents }: PreviewProps) {
     return (
-        <div className="markdown-body h-[80vh] overflow-auto rounded-lg border border-neutral-500 p-10">
+        <div className="markdown-body h-full overflow-auto rounded-lg border border-neutral-500 p-10">
             <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkMath]}
                 rehypePlugins={[rehypeHighlight, rehypeKatex]}
