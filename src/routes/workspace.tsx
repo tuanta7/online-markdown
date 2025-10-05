@@ -15,7 +15,7 @@ function RouteComponent() {
     return (
         <ProtectedLayout>
             <div className="flex gap-6 px-6 py-3 max-md:flex-col">
-                <div className="h-[90vh] max-md:w-full md:max-w-88">
+                <div className="max-h-[85vh] max-md:w-full md:max-w-88">
                     <div className="flex h-full flex-col gap-6">
                         <div className="overflow-hidden rounded-lg max-md:hidden">
                             <Gif />
@@ -26,7 +26,7 @@ function RouteComponent() {
                         <div className="rounded-lg border border-neutral-600">
                             <TaskList />
                         </div>
-                        <div className="flex-1 overflow-y-auto rounded-lg border border-neutral-600 px-3 py-1">
+                        <div className="overflow-y-auto rounded-lg border border-neutral-600 px-3 py-1 md:flex-1">
                             <DocumentList />
                         </div>
                     </div>

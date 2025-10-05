@@ -33,7 +33,6 @@ function Editor() {
     const [contents, setContents] = useState(localStorage.getItem('file-name-contents') || '');
     const useLightTheme = useThemeStore((s) => s.useLightTheme);
 
-    // For codemirror, we don't need a ref for the editor instance for basic usage
     const editorRef = useRef<EditorView | null>(null);
 
     const onContentsChange = (value: string) => {
@@ -66,7 +65,7 @@ function Editor() {
     });
 
     return (
-        <div className="flex w-full flex-col gap-3">
+        <div className="flex h-[85vh] w-full flex-col gap-3">
             <div className="flex flex-wrap-reverse justify-between gap-2">
                 <div className="flex flex-wrap items-center gap-2">
                     <div className="join rounded-2xl">

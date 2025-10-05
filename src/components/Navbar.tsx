@@ -22,12 +22,13 @@ function Navbar({ openSideBar, setOpenSideBar }: NavbarProps) {
                     onClick={() => setOpenSideBar(!openSideBar)}
                     aria-label={openSideBar ? 'Close sidebar' : 'Open sidebar'}
                 >
-                    {openSideBar ? <ChevronLeftIcon className="w-5" /> : <Bars3Icon className="w-6" />}
+                    {openSideBar ? <ChevronLeftIcon className="h-5 w-5" /> : <Bars3Icon className="h-6 w-6" />}
                 </button>
-                <a href="/" className="btn btn-ghost no-animation mx-2 border-0 text-2xl hover:bg-transparent">
+                <a href="/" className="btn btn-sm btn-ghost no-animation mx-2 border-0 text-xl hover:bg-transparent">
                     Jod Workspace
                 </a>
             </div>
+
             <div className="navbar-end gap-3">
                 <ThemeController />
                 {user ? <UserProfileAvatar user={user} /> : <LoginButton />}

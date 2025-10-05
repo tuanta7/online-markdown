@@ -1,4 +1,3 @@
-import { FolderOpenIcon } from '@heroicons/react/24/outline';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../../services/apiClient';
 
@@ -15,6 +14,9 @@ interface DocumentListResponse {
     documents: Document[];
 }
 
+import { useState } from 'react';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
+
 function DocumentList() {
     const { data, isLoading, error, refetch } = useQuery<DocumentListResponse>({
         queryKey: ['documents'],
@@ -24,23 +26,37 @@ function DocumentList() {
             }),
     });
 
+    const [search, setSearch] = useState('');
+    const filteredDocs = data?.documents?.filter((doc) => doc.name.toLowerCase().includes(search.toLowerCase())) ?? [];
+
     if (isLoading) return <div>Loading documents...</div>;
     if (error) return <div className="text-error">Error loading documents</div>;
 
     return (
-        <div className="flex flex-col gap-2">
-            <div className="mb-2 flex items-center justify-between">
-                <span className="font-semibold">Documents</span>
-                <button className="btn btn-xs" onClick={() => refetch()}>
-                    <FolderOpenIcon className="h-4 w-4" />
-                    Refresh
+        <div className="flex h-full flex-col py-2">
+            <div className="mb-4 flex items-center gap-3">
+                <h2 className="flex-1 text-lg font-bold">Documents</h2>
+                <input
+                    type="text"
+                    className="input input-sm input-bordered w-32"
+                    placeholder="Search..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                />
+                <button className="btn btn-xs btn-outline flex items-center" onClick={() => refetch()}>
+                    <ArrowPathIcon className="h-4 w-4" />
                 </button>
             </div>
-            <ul className="">
-                {data?.documents?.map((doc) => (
-                    <li key={doc.id} className="hover:bg-base-200 flex cursor-pointer items-center">
-                        {doc.isFolder ? <span className="font-bold">📁</span> : <span className="font-bold">📄</span>}
-                        <span className="truncate">{doc.name}</span>
+            <ul className="flex-1 overflow-y-auto">
+                {filteredDocs.length === 0 && <li className="text-center text-neutral-400">No documents found</li>}
+                {filteredDocs.map((doc) => (
+                    <li
+                        key={doc.id}
+                        className="hover:bg-primary/10 active:bg-primary/20 mb-2 flex cursor-pointer items-center gap-2 rounded pr-3"
+                    >
+                        {doc.isFolder ? <span className="text-xl">📁</span> : <span className="text-xl">📄</span>}
+                        <span className="truncate font-medium">{doc.name}</span>
+                        <span className="ml-auto truncate text-xs text-neutral-400">{doc.type}</span>
                     </li>
                 ))}
             </ul>
