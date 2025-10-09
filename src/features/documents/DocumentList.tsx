@@ -29,8 +29,27 @@ function DocumentList() {
     const [search, setSearch] = useState('');
     const filteredDocs = data?.documents?.filter((doc) => doc.name.toLowerCase().includes(search.toLowerCase())) ?? [];
 
-    if (isLoading) return <div>Loading documents...</div>;
-    if (error) return <div className="text-error">Error loading documents</div>;
+    const documentList = (
+        <ul className="flex-1 overflow-y-auto">
+            {filteredDocs.length === 0 && <li className="text-center text-neutral-400">No documents found</li>}
+            {filteredDocs.map((doc) => (
+                <li
+                    key={doc.id}
+                    className="hover:bg-primary/10 active:bg-primary/20 mb-2 flex cursor-pointer items-center gap-2 rounded pr-3"
+                >
+                    {doc.isFolder ? <span className="text-xl">📁</span> : <span className="text-xl">📄</span>}
+                    <span className="truncate font-medium">{doc.name}</span>
+                    <span className="ml-auto truncate text-xs text-neutral-400">{doc.type}</span>
+                </li>
+            ))}
+        </ul>
+    );
+
+    const render = () => {
+        if (isLoading) return <div>Loading documents...</div>;
+        if (error) return <div className="text-error">Error loading documents</div>;
+        return documentList;
+    };
 
     return (
         <div className="flex h-full flex-col py-2">
@@ -47,19 +66,7 @@ function DocumentList() {
                     <ArrowPathIcon className="h-4 w-4" />
                 </button>
             </div>
-            <ul className="flex-1 overflow-y-auto">
-                {filteredDocs.length === 0 && <li className="text-center text-neutral-400">No documents found</li>}
-                {filteredDocs.map((doc) => (
-                    <li
-                        key={doc.id}
-                        className="hover:bg-primary/10 active:bg-primary/20 mb-2 flex cursor-pointer items-center gap-2 rounded pr-3"
-                    >
-                        {doc.isFolder ? <span className="text-xl">📁</span> : <span className="text-xl">📄</span>}
-                        <span className="truncate font-medium">{doc.name}</span>
-                        <span className="ml-auto truncate text-xs text-neutral-400">{doc.type}</span>
-                    </li>
-                ))}
-            </ul>
+            {render()}
         </div>
     );
 }

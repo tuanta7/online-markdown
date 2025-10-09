@@ -8,6 +8,8 @@ import { useQuery } from '@tanstack/react-query';
 import { sleep } from '../../utils/mock';
 import { Fragment } from 'react';
 
+import { useThemeStore } from '../../store/themeStore';
+
 interface PreviewProps {
     contents: string;
 }
@@ -34,7 +36,7 @@ function MarkdownImage({ src = '', alt, ...props }: React.ImgHTMLAttributes<HTML
 
     let contents = (
         <Fragment>
-            <span className="loading loading-infinity loading-md"></span>
+            <span className="loading loading-infinity loading-md text-primary"></span>
             <span>{src} is loading</span>
         </Fragment>
     );
@@ -55,8 +57,13 @@ function MarkdownImage({ src = '', alt, ...props }: React.ImgHTMLAttributes<HTML
 }
 
 function Preview({ contents }: PreviewProps) {
+    const useLightTheme = useThemeStore((s) => s.useLightTheme);
+
     return (
-        <div className="markdown-body h-full overflow-auto rounded-lg border border-neutral-500 p-10">
+        <div
+            className="markdown-body h-full overflow-auto rounded-lg border border-neutral-500 p-10"
+            data-theme={useLightTheme ? 'light' : 'dark'}
+        >
             <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkMath]}
                 rehypePlugins={[rehypeHighlight, rehypeKatex]}
