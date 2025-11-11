@@ -2,39 +2,24 @@ import { DocumentIcon, PlusCircleIcon, XCircleIcon } from '@heroicons/react/24/o
 import TaskItem from './TaskItem';
 import { useState } from 'react';
 import TaskCreate from './TaskCreate';
-import { useQuery } from '@tanstack/react-query';
-
-import { apiClient } from '../../services/apiClient';
+import { useTasks } from '../../hooks/useTasks';
 
 export interface Task {
     id: string;
     title: string;
     isComplete: boolean;
     priority: number;
-    dueDate: string;
-}
-
-interface TaskListResponse {
-    page: number;
-    total: number;
-    status: string;
-    tasks: Task[];
+    dueDate?: string;
 }
 
 function TaskList() {
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [page, setPage] = useState(1);
-    const { data } = useQuery<TaskListResponse>({
-        queryKey: ['tasks', page],
-        queryFn: () => {
-            return apiClient.sendRequest('GET', `/tasks?page=${page}&pageSize=3`, {
-                withCredentials: true,
-            });
-        },
-        retry: 3,
-    });
 
-    const totalPages = data ? Math.ceil(data.total / 3) : 1;
+    const pageSize = 3;
+    const { tasks, total, createTask, deleteTask, updateTask } = useTasks(page, pageSize);
+
+    const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
     return (
         <div className="w-full py-2 pl-2">
@@ -75,16 +60,23 @@ function TaskList() {
                 </div>
             </div>
             <div className="m-2 grid max-h-[140px] gap-3 overflow-auto pr-2">
-                {showCreateForm && <TaskCreate setOpen={setShowCreateForm} />}
-                {data?.tasks && data.tasks.length === 0 && (
+                {showCreateForm && <TaskCreate setOpen={setShowCreateForm} onCreate={createTask} />}
+                {tasks && tasks.length === 0 && (
                     <div className="flex flex-col items-center justify-center gap-3 py-6 text-sm">
                         <DocumentIcon className="h-6 w-6" />
                         <div>You're all caught up!</div>
                     </div>
                 )}
-                {data?.tasks &&
-                    data.tasks.length > 0 &&
-                    data.tasks.map((task) => <TaskItem key={task.id} task={task} />)}
+                {tasks &&
+                    tasks.length > 0 &&
+                    tasks.map((task) => (
+                        <TaskItem
+                            key={task.id}
+                            task={task}
+                            onDelete={() => deleteTask(task.id)}
+                            onUpdate={(t) => updateTask(t)}
+                        />
+                    ))}
             </div>
         </div>
     );

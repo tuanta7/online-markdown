@@ -12,7 +12,6 @@ function Home() {
     const features = [
         'Built-in Formatting',
         'Beautiful Math Equations',
-        //'Instross All Devices',
         'Export as PDF Easily',
         'Google Drive Integration',
     ];

@@ -1,47 +1,20 @@
 import { useForm } from '@tanstack/react-form';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiClient } from '../../services/apiClient';
-
 import { formatDateToISO } from '../../utils/date';
 import { toast } from 'sonner';
 
 interface TaskCreateRequest {
     title: string;
     priority: number;
-    startDate: string;
-    dueDate: string;
+    startDate?: string;
+    dueDate?: string;
 }
 
 type TaskCreateProps = {
     setOpen: (open: boolean) => void;
+    onCreate: (task: TaskCreateRequest) => Promise<unknown>;
 };
 
-function TaskCreate({ setOpen }: TaskCreateProps) {
-    const queryClient = useQueryClient();
-    const { mutate: createTask } = useMutation({
-        mutationFn: async (task: TaskCreateRequest) => {
-            const payload: TaskCreateRequest = {
-                ...task,
-                startDate: formatDateToISO(task.startDate),
-                dueDate: formatDateToISO(task.dueDate),
-            };
-
-            return apiClient.sendRequest('POST', '/tasks', {
-                data: payload,
-                withCredentials: true,
-            });
-        },
-        onSuccess: () => {
-            form.reset();
-            setOpen(false);
-            toast.success('Success!!');
-            queryClient.invalidateQueries({ queryKey: ['tasks'] });
-        },
-        onError: (err) => {
-            toast.error(err.message);
-        },
-    });
-
+function TaskCreate({ setOpen, onCreate }: TaskCreateProps) {
     const form = useForm({
         defaultValues: {
             title: '',
@@ -50,7 +23,20 @@ function TaskCreate({ setOpen }: TaskCreateProps) {
             dueDate: '',
         },
         onSubmit: async ({ value }) => {
-            createTask(value);
+            try {
+                const payload: TaskCreateRequest = {
+                    ...value,
+                    startDate: value.startDate ? formatDateToISO(value.startDate) : undefined,
+                    dueDate: value.dueDate ? formatDateToISO(value.dueDate) : undefined,
+                };
+                await onCreate(payload);
+                form.reset();
+                setOpen(false);
+                toast.success('Success!!');
+            } catch (err: unknown) {
+                const msg = err instanceof Error ? err.message : String(err);
+                toast.error(msg || 'Failed to create task');
+            }
         },
     });
 

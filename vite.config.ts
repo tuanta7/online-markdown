@@ -10,6 +10,6 @@ export default defineConfig({
         react()
     ],
     server: {
-        allowedHosts: ['app-dev.jodspace.work'],
+        allowedHosts: ['www.jodspace.work', 'jodspace.work'],
     },
 });
