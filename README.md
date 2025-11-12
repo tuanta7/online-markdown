@@ -1,13 +1,11 @@
-# UI for Jod
+# Jod
 
-- [Google PKCE Flow](https://developers.google.com/identity/protocols/oauth2/native-app)
-- [GIPHY Developer](https://developers.giphy.com/)
+📝 Online markdown editor with automatic formatting.
 
-## Setup NodeJS
-
-Install NVM
+## Setup Development Environment
 
 ```shell
+# install NVM
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 
 export NVM_DIR="$HOME/.nvm"
@@ -16,15 +14,13 @@ export NVM_DIR="$HOME/.nvm"
 
 source ~/.bashrc
 nvm --version
-```
 
-Install NodeJS
-
-```shell
+# install NodeJS
 nvm list
 nvm install --lts
 ```
 
-## Sources
+## References
 
-- [GIPHY GIF](https://giphy.com/gifs/waterfall-river-purity-f2uJ1pbidyrEA)
+- [Google PKCE Flow](https://developers.google.com/identity/protocols/oauth2/native-app)
+- [GIPHY Developer](https://developers.giphy.com/)
