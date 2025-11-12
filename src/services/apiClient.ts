@@ -1,13 +1,12 @@
 import request, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
-import { API } from '../utils/config.ts';
 
 function redirect(target: string): void {
     window.location.replace(target);
 }
 
-async function sendRequest<T>(method: string, path: string, config?: AxiosRequestConfig<unknown>): Promise<T> {
+async function sendRequest<T>(method: string, url: string, config?: AxiosRequestConfig<unknown>): Promise<T> {
     try {
-        const response: AxiosResponse<T> = await request(API.BASE_URL + path, {
+        const response: AxiosResponse<T> = await request(url, {
             method: method,
             ...config,
         });

@@ -10,13 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkspaceRouteImport } from './routes/workspace'
+import { Route as CallbackRouteImport } from './routes/callback'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as CallbackGoogleRouteImport } from './routes/callback/google'
-import { Route as CallbackGithubRouteImport } from './routes/callback/github'
 
 const WorkspaceRoute = WorkspaceRouteImport.update({
   id: '/workspace',
   path: '/workspace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CallbackRoute = CallbackRouteImport.update({
+  id: '/callback',
+  path: '/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -24,49 +28,35 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CallbackGoogleRoute = CallbackGoogleRouteImport.update({
-  id: '/callback/google',
-  path: '/callback/google',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CallbackGithubRoute = CallbackGithubRouteImport.update({
-  id: '/callback/github',
-  path: '/callback/github',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/callback': typeof CallbackRoute
   '/workspace': typeof WorkspaceRoute
-  '/callback/github': typeof CallbackGithubRoute
-  '/callback/google': typeof CallbackGoogleRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/callback': typeof CallbackRoute
   '/workspace': typeof WorkspaceRoute
-  '/callback/github': typeof CallbackGithubRoute
-  '/callback/google': typeof CallbackGoogleRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/callback': typeof CallbackRoute
   '/workspace': typeof WorkspaceRoute
-  '/callback/github': typeof CallbackGithubRoute
-  '/callback/google': typeof CallbackGoogleRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/workspace' | '/callback/github' | '/callback/google'
+  fullPaths: '/' | '/callback' | '/workspace'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/workspace' | '/callback/github' | '/callback/google'
-  id: '__root__' | '/' | '/workspace' | '/callback/github' | '/callback/google'
+  to: '/' | '/callback' | '/workspace'
+  id: '__root__' | '/' | '/callback' | '/workspace'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CallbackRoute: typeof CallbackRoute
   WorkspaceRoute: typeof WorkspaceRoute
-  CallbackGithubRoute: typeof CallbackGithubRoute
-  CallbackGoogleRoute: typeof CallbackGoogleRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -78,6 +68,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkspaceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/callback': {
+      id: '/callback'
+      path: '/callback'
+      fullPath: '/callback'
+      preLoaderRoute: typeof CallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -85,28 +82,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/callback/google': {
-      id: '/callback/google'
-      path: '/callback/google'
-      fullPath: '/callback/google'
-      preLoaderRoute: typeof CallbackGoogleRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/callback/github': {
-      id: '/callback/github'
-      path: '/callback/github'
-      fullPath: '/callback/github'
-      preLoaderRoute: typeof CallbackGithubRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CallbackRoute: CallbackRoute,
   WorkspaceRoute: WorkspaceRoute,
-  CallbackGithubRoute: CallbackGithubRoute,
-  CallbackGoogleRoute: CallbackGoogleRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
